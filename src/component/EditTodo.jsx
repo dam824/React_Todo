@@ -1,8 +1,13 @@
  import { useState } from "react"
 import Button from "./Button";
 
-const EditTodo = ({todo, editTodo, cancelEditTodo}) => {
+import { TodoDispatcherContext } from "../context/todoContext";
+import { useContext } from "react"
+
+
+const EditTodo = ({todo}) => {
   const [value, setValue] = useState(todo.content);
+  const dispatch = useContext(TodoDispatcherContext)
 
   const handleChange = (e) => {
     const inputValue = e.target.value
@@ -11,14 +16,22 @@ const EditTodo = ({todo, editTodo, cancelEditTodo}) => {
 
   const handleClick = () => {
     if(value.length){
-      editTodo(value);
+      dispatch({
+        type: 'EDIT_TODO',
+        id: todo.id,
+        content: value
+      })
         setValue('');
     }
   }
 
   const handleKeyDown = (e) => {
     if(e.code ==="Enter"){
-      editTodo(value);
+      dispatch({
+        type: 'EDIT_TODO',
+        id: todo.id,
+        content: value
+      })
       setValue('');
     }
   }
@@ -34,7 +47,10 @@ const EditTodo = ({todo, editTodo, cancelEditTodo}) => {
         />
        {/** click boutton recupere la value et passe en parametre de la fonction addTodo */} 
        <Button  onClick={handleClick} text="Modifier"  className="mr-15" theme="primary" />
-       <Button  onClick={cancelEditTodo} text="Annuler" theme="secondary" />
+       <Button  onClick={()=>(dispatch)({
+          type: 'TOGGLE_EDIT_TODO',
+          id: todo.id
+        })} text="Annuler" theme="secondary" />
         
         
         </div>

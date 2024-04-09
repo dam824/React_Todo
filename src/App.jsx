@@ -8,6 +8,12 @@ import themeContext from './context/theme';
 import { useReducer } from 'react';
 import todoReducer from './reducers/todoReducer';
 
+
+{/**import context  */}
+import {TodoStateContext} from './context/todoContext'
+import {TodoDispatcherContext} from './context/todoContext'
+
+
 function App() {
   const [state, dispatch] = useReducer(todoReducer, {
     theme: 'primary',
@@ -16,51 +22,9 @@ function App() {
 
    {/**action to dispatch parameters  */}
  
-  const addTodo = (content) => {
-   dispatch({
-    type: 'ADD_TODO',
-    content
-   })
-  }
-
-
-  const deleteTodo = (id) => {
-     dispatch({
-      type:'DELETE_TODO',
-      id
-     })
-  }
-
-  const toggleTodo = (id) =>{
-      dispatch({
-        type: 'TOGGLE_TODO',
-        id,
-      })
-  }
-
-  const toggleEdit = (id) => {
-      dispatch({
-        type: 'TOGGLE_EDIT_TODO',
-        id
-      })
-  }
-
  
-  const editTodo = (id, content) => {
-      dispatch({
-        type: 'EDIT_TODO',
-        id,
-        content
-      })
-  }
-
-  const selectTask = (id) => {
-      dispatch({
-        type: 'SELECT_TODO',
-        id
-      })
-  }
-
+ 
+ 
   const handleChange = (e) => {
     dispatch({
       type : 'SET_THEME',
@@ -68,13 +32,14 @@ function App() {
     })
   }
 
- 
- 
-
-  
 
   return (
     
+
+    
+    <TodoStateContext.Provider value={state}>
+    <TodoDispatcherContext.Provider value={dispatch}>
+
     <themeContext.Provider value={state.theme}>
       <div className='d-flex flex-row justify-content-center align-items-center'>
       <div className='card container p-20'>
@@ -85,19 +50,17 @@ function App() {
             <option value="secondary">Bleu</option>
           </select>
           </h1>
-        <AddTodo addTodo={addTodo} />
+        <AddTodo />
         {/**on transmet la todolist a notre composant todoList */}
         <TodoLists 
-        todoList={state.todoList} 
-        deleteTodo={deleteTodo} 
-        toggleTodo={toggleTodo} 
-        toggleEdit={toggleEdit} 
-        editTodo= {editTodo} 
-        selectTask = {selectTask}
         />
       </div>
       </div>
       </themeContext.Provider>
+
+      </TodoDispatcherContext.Provider>
+    </TodoStateContext.Provider>
+
     
   )
 }
