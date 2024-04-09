@@ -1,11 +1,11 @@
- import { useContext, useState } from "react"
+ import { useState } from "react"
 import Button from "./Button";
-import { TodoDispatcherContext } from "../context/todoContext";
+import {  useTodosDispatcher } from "../context/todoContext";
 
 const AddTodo = () => {
     {/**la valeur de l'input a pas besoin d etre remontee dans l'app */}
   const [value, setValue] = useState('');
-  const dispatch = useContext(TodoDispatcherContext)
+  const dispatch = useTodosDispatcher()
 
   const handleChange = (e) => {
     const inputValue = e.target.value;
